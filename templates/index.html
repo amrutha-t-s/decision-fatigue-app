@@ -1,21 +1,247 @@
 <!doctype html>
 <html>
   <head>
-    <title>Decision Fatigue App</title>
+    <title>Decision Kitty 🐾</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap");
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Poppins", sans-serif;
+        min-height: 100vh;
+        background: linear-gradient(
+          135deg,
+          #ffeef8 0%,
+          #f8d7e9 50%,
+          #e8c7d9 100%
+        );
+        overflow-x: hidden;
+        cursor: none;
+      }
+
+      /* Custom Bow Cursor */
+      .bow-cursor {
+        position: fixed;
+        width: 40px;
+        height: 40px;
+        background:
+          radial-gradient(circle at 30% 30%, #ff69b4 20%, transparent 20%),
+          radial-gradient(circle at 70% 30%, #ff1493 20%, transparent 20%),
+          radial-gradient(circle at 50% 70%, #ffc0cb 30%, transparent 30%);
+        border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+        pointer-events: none;
+        z-index: 9999;
+        transition: transform 0.1s ease;
+        box-shadow: 0 4px 15px rgba(255, 105, 180, 0.5);
+      }
+
+      /* Hide default cursor */
+      body,
+      button {
+        cursor: none !important;
+      }
+
+      /* Kitty Background */
+      .kitty-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0.1;
+        z-index: -1;
+        pointer-events: none;
+      }
+
+      /* Header */
+      .header {
+        text-align: center;
+        padding: 30px;
+        color: #ff69b4;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      h1 {
+        font-size: 3em;
+        margin-bottom: 10px;
+        background: linear-gradient(45deg, #ff69b4, #ff1493, #ffc0cb);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        animation: glow 2s ease-in-out infinite alternate;
+      }
+
+      @keyframes glow {
+        from {
+          filter: drop-shadow(0 0 5px #ff69b4);
+        }
+        to {
+          filter: drop-shadow(0 0 20px #ff1493);
+        }
+      }
+
+      /* Buttons Container */
+      .buttons {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+        padding: 50px 20px;
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      .btn {
+        flex: 1;
+        min-width: 180px;
+        padding: 20px 30px;
+        font-size: 1.4em;
+        font-weight: 600;
+        border: none;
+        border-radius: 25px;
+        cursor: none;
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        text-decoration: none;
+        color: white;
+      }
+
+      .btn:hover {
+        transform: translateY(-10px) scale(1.05);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      }
+
+      .btn:active {
+        transform: translateY(-5px) scale(1.02);
+      }
+
+      /* Button Colors */
+      .home {
+        background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+      }
+      .outfits {
+        background: linear-gradient(45deg, #4ecdc4, #44a08d);
+      }
+      .outings {
+        background: linear-gradient(45deg, #45b7d1, #96c93d);
+      }
+      .meals {
+        background: linear-gradient(45deg, #f9ca24, #f0932b);
+      }
+
+      /* Result */
+      .result {
+        text-align: center;
+        margin-top: 50px;
+        padding: 30px;
+        min-height: 150px;
+      }
+
+      .choice {
+        font-size: 2.5em;
+        color: #ff69b4;
+        margin: 20px 0;
+        font-weight: 600;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        h1 {
+          font-size: 2em;
+        }
+        .btn {
+          min-width: 150px;
+          padding: 15px 20px;
+          font-size: 1.2em;
+        }
+      }
+    </style>
   </head>
   <body>
-    <h1>Let the App Decide!</h1>
-    <form method="POST">
-      <label>Category:</label>
-      <select name="category">
-        {% for cat in options %}
-        <option value="{{ cat }}">{{ cat.title() }}</option>
-        {% endfor %}
-      </select>
-      <button type="submit">Decide for Me</button>
-    </form>
+    <!-- Kitty Background -->
+    <div class="kitty-bg"></div>
+
+    <!-- Custom Cursor -->
+    <div class="bow-cursor" id="bowCursor"></div>
+
+    <!-- Header -->
+    <div class="header">
+      <h1>🐾 Decision Kitty 🐾</h1>
+      <p>Let me choose for you meow! 😻</p>
+    </div>
+
+    <!-- Buttons -->
+    <div class="buttons">
+      <form method="POST" style="flex: 1; min-width: 180px">
+        <button type="submit" name="category" value="home" class="btn home">
+          🏠 Home
+        </button>
+      </form>
+      <form method="POST" style="flex: 1; min-width: 180px">
+        <button
+          type="submit"
+          name="category"
+          value="outfits"
+          class="btn outfits"
+        >
+          👗 Outfits
+        </button>
+      </form>
+      <form method="POST" style="flex: 1; min-width: 180px">
+        <button
+          type="submit"
+          name="category"
+          value="outings"
+          class="btn outings"
+        >
+          🌟 Outings
+        </button>
+      </form>
+      <form method="POST" style="flex: 1; min-width: 180px">
+        <button type="submit" name="category" value="meals" class="btn meals">
+          🍕 Meals
+        </button>
+      </form>
+    </div>
+
+    <!-- Result -->
     {% if choice %}
-    <h2>Your choice: {{ choice }}</h2>
+    <div class="result">
+      <h2>🎉 Kitty chose:</h2>
+      <div class="choice">{{ choice }}</div>
+      <p>Trust the kitty wisdom! 🐾✨</p>
+    </div>
     {% endif %}
+
+    <script>
+      // Bow Cursor Follow Mouse
+      const bowCursor = document.getElementById("bowCursor");
+      document.addEventListener("mousemove", (e) => {
+        bowCursor.style.left = e.clientX - 20 + "px";
+        bowCursor.style.top = e.clientY - 20 + "px";
+      });
+
+      // Hover animations
+      document.querySelectorAll(".btn").forEach((btn) => {
+        btn.addEventListener("mouseenter", () => {
+          bowCursor.style.transform = "scale(1.3) rotate(10deg)";
+        });
+        btn.addEventListener("mouseleave", () => {
+          bowCursor.style.transform = "scale(1)";
+        });
+      });
+    </script>
   </body>
 </html>

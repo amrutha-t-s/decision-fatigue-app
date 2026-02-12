@@ -4,10 +4,12 @@ from flask import Flask, render_template, request
 app = Flask(__name__)
 
 # Sample options for categories
+
 OPTIONS = {
-    'meals': ['Pasta', 'Salad', 'Burger', 'Sushi', 'Pizza'],
-    'outfits': ['Jeans + T-shirt', 'Dress', 'Suit', 'Shorts + Top', 'Sweater + Pants'],
-    'tasks': ['Check emails', 'Gym workout', 'Read book', 'Call friend', 'Grocery shopping']
+    'home': ['Relax on couch 🛋️', 'Watch Netflix 📺', 'Play with kitty 🐱', 'Nap time 😴'],
+    'outfits': ['Casual jeans 👖', 'Party dress ✨', 'Sporty look 🏃‍♀️', 'Cozy sweater 🧥'],
+    'outings': ['Coffee shop ☕', 'Park walk 🌳', 'Movie night 🎬', 'Shopping spree 🛍️'],
+    'meals': ['Pizza party 🍕', 'Healthy salad 🥗', 'Pasta love 🍝', 'Ice cream dessert 🍦']
 }
 
 @app.route('/', methods=['GET', 'POST'])
