@@ -1,0 +1,21 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Decision Fatigue App</title>
+  </head>
+  <body>
+    <h1>Let the App Decide!</h1>
+    <form method="POST">
+      <label>Category:</label>
+      <select name="category">
+        {% for cat in options %}
+        <option value="{{ cat }}">{{ cat.title() }}</option>
+        {% endfor %}
+      </select>
+      <button type="submit">Decide for Me</button>
+    </form>
+    {% if choice %}
+    <h2>Your choice: {{ choice }}</h2>
+    {% endif %}
+  </body>
+</html>
